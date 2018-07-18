@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 		double area = contourArea(contours[t]);
 		if (area < 100) continue;
 		RotatedRect rect = minAreaRect(contours[t]);
-		// ¸ù¾İ¾ØĞÎÌØÕ÷½øĞĞ¼¸ºÎ·ÖÎö
+		// æ ¹æ®çŸ©å½¢ç‰¹å¾è¿›è¡Œå‡ ä½•åˆ†æ
 		float w = rect.size.width;
 		float h = rect.size.height;
 		float rate = min(w, h) / max(w, h);
@@ -62,10 +62,10 @@ Mat src; Mat src_gray;
 RNG rng(12345);
 //Scalar colorful = CV_RGB(rng.uniform(0,255),rng.uniform(0,255),rng.uniform(0,255));
 
-Point Center_cal(vector<vector<Point> > contours, int i)//ÕÒµ½ËùÌáÈ¡ÂÖÀªµÄÖĞĞÄµã
+Point Center_cal(vector<vector<Point> > contours, int i)//æ‰¾åˆ°æ‰€æå–è½®å»“çš„ä¸­å¿ƒç‚¹
 {
 	int centerx = 0, centery = 0, n = contours[i].size();
-	//ÔÚÌáÈ¡µÄĞ¡Õı·½ĞÎµÄ±ß½çÉÏÃ¿¸ôÖÜ³¤¸öÏñËØÌáÈ¡Ò»¸öµãµÄ×ø±ê£¬ÇóËùÌáÈ¡ËÄ¸öµãµÄÆ½¾ù×ø±ê£¨¼´ÎªĞ¡Õı·½ĞÎµÄ´óÖÂÖĞĞÄ£©
+	//åœ¨æå–çš„å°æ­£æ–¹å½¢çš„è¾¹ç•Œä¸Šæ¯éš”å‘¨é•¿ä¸ªåƒç´ æå–ä¸€ä¸ªç‚¹çš„åæ ‡ï¼Œæ±‚æ‰€æå–å››ä¸ªç‚¹çš„å¹³å‡åæ ‡ï¼ˆå³ä¸ºå°æ­£æ–¹å½¢çš„å¤§è‡´ä¸­å¿ƒï¼‰
 	centerx = (contours[i][n / 4].x + contours[i][n * 2 / 4].x + contours[i][3 * n / 4].x + contours[i][n - 1].x) / 4;
 	centery = (contours[i][n / 4].y + contours[i][n * 2 / 4].y + contours[i][3 * n / 4].y + contours[i][n - 1].y) / 4;
 	Point point1 = Point(centerx, centery);
@@ -85,7 +85,7 @@ int main(int argc, char** argv[])
 	//  src_gray = Scalar::all(255) - src_gray;
 	blur(src_gray, src_gray, Size(3, 3));
 	equalizeHist(src_gray, src_gray);
-	imshow("ÂË²¨ºó", src_gray);
+	imshow("æ»¤æ³¢å", src_gray);
 
 	Scalar color = Scalar(1, 1, 255);
 	Mat threshold_output;
@@ -95,15 +95,15 @@ int main(int argc, char** argv[])
 	Mat drawing2 = Mat::zeros(src.size(), CV_8UC3);
 	threshold(src_gray, threshold_output, 112, 255, THRESH_BINARY);
 	//Canny(src_gray,threshold_output,136,196,3);
-	//imshow("Ô¤´¦Àíºó£º",threshold_output);
+	//imshow("é¢„å¤„ç†åï¼š",threshold_output);
 
 	findContours(threshold_output, contours, hierarchy, CV_RETR_TREE, CHAIN_APPROX_NONE, Point(0, 0));
-	//CHAIN_APPROX_NONEÈ«Ìå,CV_CHAIN_APPROX_SIMPLE,,,RETR_TREE    RETR_EXTERNAL    RETR_LIST   RETR_CCOMP
+	//CHAIN_APPROX_NONEå…¨ä½“,CV_CHAIN_APPROX_SIMPLE,,,RETR_TREE    RETR_EXTERNAL    RETR_LIST   RETR_CCOMP
 
 	int c = 0, ic = 0, k = 0, area = 0;
 	//
-	//³ÌĞòµÄºËĞÄÉ¸Ñ¡
-	//³ÌĞòµÄºËĞÄÉ¸Ñ¡
+	//ç¨‹åºçš„æ ¸å¿ƒç­›é€‰
+	//ç¨‹åºçš„æ ¸å¿ƒç­›é€‰
 	int parentIdx = -1;
 	for (int i = 0; i< contours.size(); i++)
 	{
@@ -129,7 +129,7 @@ int main(int argc, char** argv[])
 			drawContours(drawing, contours, parentIdx, CV_RGB(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255)), 1, 8);
 			ic = 0;
 			parentIdx = -1;
-			area = contourArea(contours[i]);//µÃ³öÒ»¸ö¶şÎ¬Âë¶¨Î»½ÇµÄÃæ»ı£¬ÒÔ±ã¼ÆËãÆä±ß³¤£¨area_side£©£¨Êı¾İ¸²¸ÇÎŞËùÎ½£¬Èı¸ö¶¨Î»½ÇÖĞÈÎÒâÒ»¸öÊı¾İ¶¼¿ÉÒÔ£©
+			area = contourArea(contours[i]);//å¾—å‡ºä¸€ä¸ªäºŒç»´ç å®šä½è§’çš„é¢ç§¯ï¼Œä»¥ä¾¿è®¡ç®—å…¶è¾¹é•¿ï¼ˆarea_sideï¼‰ï¼ˆæ•°æ®è¦†ç›–æ— æ‰€è°“ï¼Œä¸‰ä¸ªå®šä½è§’ä¸­ä»»æ„ä¸€ä¸ªæ•°æ®éƒ½å¯ä»¥ï¼‰
 		}
 		//cout<<"i= "<<i<<" hierarchy[i][2]= "<<hierarchy[i][2]<<" parentIdx= "<<parentIdx<<" ic= "<<ic<<endl;
 
@@ -147,7 +147,7 @@ int main(int argc, char** argv[])
 		point[i] = Center_cal(contours2, i);
 	}
 
-	area = contourArea(contours2[1]);//ÎªÊ²Ã´ÕâÒ»¾äºÍÇ°ÃæÒ»¾ä¼ÆËãµÄÃæ»ı²»Ò»ÑùÄØ
+	area = contourArea(contours2[1]);//ä¸ºä»€ä¹ˆè¿™ä¸€å¥å’Œå‰é¢ä¸€å¥è®¡ç®—çš„é¢ç§¯ä¸ä¸€æ ·å‘¢
 	int area_side = cvRound(sqrt(double(area)));
 	for (int i = 0; i<contours2.size(); i++)
 	{
@@ -155,12 +155,12 @@ int main(int argc, char** argv[])
 	}
 
 
-	imshow("ÌáÈ¡ºó", drawing2);
+	imshow("æå–å", drawing2);
 	printf("%d\n", contours.size());
 	//imshow( "Contours", drawing );
 
 
-	//½ÓÏÂÀ´Òª¿ò³öÕâÕû¸ö¶şÎ¬Âë
+	//æ¥ä¸‹æ¥è¦æ¡†å‡ºè¿™æ•´ä¸ªäºŒç»´ç 
 	Mat gray_all, threshold_output_all;
 	vector<vector<Point> > contours_all;
 	vector<Vec4i> hierarchy_all;
@@ -168,15 +168,15 @@ int main(int argc, char** argv[])
 
 
 	threshold(gray_all, threshold_output_all, 45, 255, THRESH_BINARY);
-	findContours(threshold_output_all, contours_all, hierarchy_all, RETR_EXTERNAL, CHAIN_APPROX_NONE, Point(0, 0));//RETR_EXTERNAL±íÊ¾Ö»Ñ°ÕÒ×îÍâ²ãÂÖÀª
+	findContours(threshold_output_all, contours_all, hierarchy_all, RETR_EXTERNAL, CHAIN_APPROX_NONE, Point(0, 0));//RETR_EXTERNALè¡¨ç¤ºåªå¯»æ‰¾æœ€å¤–å±‚è½®å»“
 
 
-																												   //Çó×îĞ¡°üÎ§¾ØĞÎ£¬Ğ±µÄÒ²¿ÉÒÔÅ¶
+																												   //æ±‚æœ€å°åŒ…å›´çŸ©å½¢ï¼Œæ–œçš„ä¹Ÿå¯ä»¥å“¦
 	RotatedRect rectPoint = minAreaRect(contours_all[0]);
 	Point2f fourPoint2f[4];
 
 
-	//½«rectPoint±äÁ¿ÖĞ´æ´¢µÄ×ø±êÖµ·Åµ½ fourPointµÄÊı×éÖĞ  
+	//å°†rectPointå˜é‡ä¸­å­˜å‚¨çš„åæ ‡å€¼æ”¾åˆ° fourPointçš„æ•°ç»„ä¸­  
 	rectPoint.points(fourPoint2f);
 
 
@@ -187,7 +187,7 @@ int main(int argc, char** argv[])
 	}
 
 
-	imshow("¶şÎ¬Âë", src_all);
+	imshow("äºŒç»´ç ", src_all);
 
 
 	waitKey(0);
